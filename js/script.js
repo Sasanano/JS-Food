@@ -119,7 +119,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // const modalTimerId = setTimeout(openModal, 3000);
+    const modalTimerId = setTimeout(openModal, 3000);
     window.addEventListener('scroll', showModalByScroll);
 
     //Классы для карточек
@@ -181,5 +181,46 @@ window.addEventListener('DOMContentLoaded', () => {
         21,
         ".menu .container"
     ).render();
+    
+    //Forms
 
+    const forms = document.querySelectorAll('form');
+
+    forms.forEach(item => {
+        postData(item);
+    });
+
+    const message = {
+        loading: 'Загрузка',
+        success: 'Спасибо! Скоро мы с Вами свяжемся',
+        failure: 'Что-то пошло не так...'
+    };
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = message.loading;
+            form.append(statusMessage);
+
+            const r = new XMLHttpRequest();
+            r.open('POST', 'server.php');
+
+            // r.setRequestHeader('Content-type', 'multipart/form-data');
+            const formData = new FormData(form);
+
+            r.send(formData);
+
+            r.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = message.success;
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            })
+        });
+    }
 });
