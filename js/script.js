@@ -205,10 +205,6 @@ window.addEventListener('DOMContentLoaded', () => {
             statusMessage.textContent = message.loading;
             form.append(statusMessage);
 
-            const r = new XMLHttpRequest();
-            r.open('POST', 'server.php');
-
-            r.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
             const object = {};
@@ -217,20 +213,24 @@ window.addEventListener('DOMContentLoaded', () => {
             });
 
 
-            r.send(JSON.stringify(object));
-
-            r.addEventListener('load', () => {
-                if (r.status === 200) {
-                    console.log(r.response);
+            fetch('server.php', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json'
+                }
+                body: JSON.stringify(object)
+            }).then(data => {
+                console.log(data);
                     statusMessage.textContent = message.success;
-                    form.reset();
                     setTimeout(() => {
                         statusMessage.remove();
                     }, 2000);
-                } else {
-                    statusMessage.textContent = message.failure;
-                }
-            })
+
+            }).catch(() => {
+                statusMessage.textContent = message.failure;
+            }).finally(() => {
+                form.reset();
+            });
         });
     }
 });
