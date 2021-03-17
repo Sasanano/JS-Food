@@ -208,10 +208,16 @@ window.addEventListener('DOMContentLoaded', () => {
             const r = new XMLHttpRequest();
             r.open('POST', 'server.php');
 
-            // r.setRequestHeader('Content-type', 'multipart/form-data');
+            r.setRequestHeader('Content-type', 'application/json');
             const formData = new FormData(form);
 
-            r.send(formData);
+            const object = {};
+            formData.forEach(function(value, key) {
+                object[key] = value;
+            });
+
+
+            r.send(JSON.stringify(object));
 
             r.addEventListener('load', () => {
                 if (r.status === 200) {
