@@ -214,8 +214,8 @@ window.addEventListener('DOMContentLoaded', () => {
             r.send(formData);
 
             r.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
+                if (r.status === 200) {
+                    console.log(r.response);
                     statusMessage.textContent = message.success;
                 } else {
                     statusMessage.textContent = message.failure;
